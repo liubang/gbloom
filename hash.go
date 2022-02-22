@@ -8,10 +8,8 @@ const (
 func Hash(data []byte, n uint32, seed uint32) uint32 {
 	h := seed ^ (n * m)
 	var idx uint32
-	for {
-		if idx+4 > n {
-			break
-		}
+	// Pick up four bytes at a time
+	for idx+4 <= n {
 		w := DecodeFixed32(data[idx:])
 		idx += 4
 		h += w

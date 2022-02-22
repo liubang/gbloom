@@ -1,9 +1,23 @@
 package gbloom
 
 import (
-	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
+
+func TestSmall(t *testing.T) {
+	bloomFilter := NewBloomFilter(16 * 8)
+	keys := [][]byte{
+		[]byte("hello"),
+		[]byte("world"),
+	}
+	filter := bloomFilter.CreateFilter(keys)
+	assert.True(t, bloomFilter.KeyMayMatch(filter, []byte("hello")))
+	assert.True(t, bloomFilter.KeyMayMatch(filter, []byte("world")))
+	assert.False(t, bloomFilter.KeyMayMatch(filter, []byte("x")))
+	assert.False(t, bloomFilter.KeyMayMatch(filter, []byte("foo")))
+}
 
 func TestBloomFilter(t *testing.T) {
 	bloomFilter := NewBloomFilter(16 * 8)
@@ -16,18 +30,6 @@ func TestBloomFilter(t *testing.T) {
 	}
 	filter := bloomFilter.CreateFilter(keys)
 	for _, bys := range keys {
-		res := bloomFilter.KeyMayMatch(filter, bys)
-		if !res {
-			t.Errorf("the key %s match result is error, result: %v", string(bys), res)
-		}
-	}
-
-	keys_not_in_filters := [][]byte{
-		[]byte("rpshHpE3CPInGPeb"),
-		[]byte("T40#TEoxh*3DA*Ad"),
-	}
-	for _, bys := range keys_not_in_filters {
-		res := bloomFilter.KeyMayMatch(filter, bys)
-		fmt.Printf("key:%s, res:%v\n", string(bys), res)
+		assert.True(t, bloomFilter.KeyMayMatch(filter, bys))
 	}
 }

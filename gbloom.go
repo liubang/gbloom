@@ -26,6 +26,10 @@ func NewBloomFilter(bits_per_key uint8) *BloomFilter {
 	}
 }
 
+func (bloom *BloomFilter) Name() string {
+	return "gleveldb.BuiltinBloomFilter2"
+}
+
 func (bloom *BloomFilter) CreateFilter(keys [][]byte) []byte {
 	n := len(keys)
 	bits := uint32(n) * uint32(bloom.bits_per_key)

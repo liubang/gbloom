@@ -2,6 +2,8 @@ package gbloom
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -23,9 +25,6 @@ var (
 func TestHash(t *testing.T) {
 	for str, val := range test_cases {
 		byte_arr := []byte(str)
-		res := Hash(byte_arr, uint32(len(byte_arr)), 0xbc9f1d34)
-		if res != val {
-			t.Errorf("%s,error:%d\n", str, res)
-		}
+		assert.Equal(t, Hash(byte_arr, uint32(len(byte_arr)), 0xbc9f1d34), val)
 	}
 }
